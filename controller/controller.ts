@@ -142,3 +142,31 @@ export const SingleUser = async (req: Request, res: Response) => {
     });
   }
 };
+
+export const UpdateUser = async (req: Request, res: Response) => {
+  try {
+    const { userID } = req.params;
+
+    const user = await userModel.findById(userID);
+    const { secure_url, public_id }: any = await streamUpload(req);
+
+    const userInfo = await userModel.findByIdAndUpdate(
+      userID,
+      {
+        avatar: secure_url,
+        avatarID: public_id,
+      },
+      { new: true }
+    );
+
+    return res.status(HTTP.CREATE).json({
+      message: "User",
+      data: userInfo,
+    });
+  } catch (error: any) {
+    return res.status(HTTP.BAD_REQUEST).json({
+      message: `Error occured updating user: ${error.message}`,
+      info: error,
+    });
+  }
+};
