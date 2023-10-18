@@ -170,3 +170,19 @@ export const UpdateUser = async (req: Request, res: Response) => {
     });
   }
 };
+
+export const DeleteUser = async (req: Request, res: Response) => {
+  try {
+    const { userID } = req.params;
+    const remove = await userModel.findByIdAndDelete(userID);
+
+    return res.status(HTTP.OK).json({
+      message: "Deleted",
+    });
+  } catch (error: any) {
+    return res.status(HTTP.NOT_FOUND).json({
+      message: `Error occured deleting users: ${error.message}`,
+      info: error,
+    });
+  }
+};
