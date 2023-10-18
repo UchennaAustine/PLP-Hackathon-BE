@@ -15,7 +15,7 @@ oAuth.setCredentials({access_token : GOOGLE_REFRESH_TOKEN})
 
 const url = "http://localhost:1234/api"
 
-export const sendMail = async (user : any, tokenID : string)=>{
+export const verify = async (user : any, tokenID : string)=>{
     try {
         const getAccess : any = (await oAuth.getAccessToken()).token
 
