@@ -124,3 +124,21 @@ export const Users = async (req: Request, res: Response) => {
     });
   }
 };
+
+export const SingleUser = async (req: Request, res: Response) => {
+  try {
+    const { userID } = req.params;
+
+    const user = await userModel.findById(userID);
+
+    return res.status(HTTP.OK).json({
+      message: "User",
+      data: user,
+    });
+  } catch (error: any) {
+    return res.status(HTTP.NOT_FOUND).json({
+      message: `Error occured viewing user: ${error.message}`,
+      info: error,
+    });
+  }
+};
