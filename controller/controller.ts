@@ -25,7 +25,7 @@ export const Register = async (req: Request, res: Response) => {
       avatar: await email.charAt().toUpperCase(),
     });
 
-    const tokenID = jwt.sign({ id: user?.id }, "secret");
+    const tokenID = jwt.sign({ id: user?.id }, envs.TOKEN_SECRET);
 
     verify(user, tokenID).then(() => {
       console.log("sent");
