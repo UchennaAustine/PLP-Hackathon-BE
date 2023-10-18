@@ -59,21 +59,21 @@ export const Verification = async (req: Request, res: Response) => {
       }
     );
 
-    if (user) {
-      await userModel.findByIdAndUpdate(
-        user?.id,
-        { token: "", verify: true },
-        { new: true }
-      );
+    // if (user?.id) {
+    await userModel.findByIdAndUpdate(
+      user?.id,
+      { token: "", verify: true },
+      { new: true }
+    );
 
-      return res.status(HTTP.CREATE).json({
-        message: "Congratulations your account has been Verified!!!",
-      });
-    } else {
-      return res.status(HTTP.BAD_REQUEST).json({
-        message: "Error with your ID",
-      });
-    }
+    return res.status(HTTP.CREATE).json({
+      message: "Congratulations your account has been Verified!!!",
+    });
+    // } else {
+    //   return res.status(HTTP.BAD_REQUEST).json({
+    //     message: "Error with your ID",
+    //   });
+    // }
   } catch (error: any) {
     return res.status(HTTP.BAD_REQUEST).json({
       message: `User Registration Error: ${error.message}`,

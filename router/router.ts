@@ -10,14 +10,16 @@ import {
 } from "../controller/controller";
 
 import multer from "multer";
+import validatorHolder from "../utils/validatorHolder";
+import { registerValidator, signInValidator } from "../utils/validator";
 
 const router: Router = Router();
 
 const imageUpload = multer().single("avatar");
 
-router.route("/register").post(Register);
-router.route("/:token/verify").post(Verification);
-router.route("/sign-in").post(SignIn);
+router.route("/register").post(validatorHolder(registerValidator), Register);
+router.route("/:token/verify").get(Verification);
+router.route("/sign-in").post(validatorHolder(signInValidator), SignIn);
 router.route("/view-users").get(Users);
 router.route("/:userID/view-user").get(SingleUser);
 router.route("/:userID/update-user-info").patch(imageUpload, UpdateUser);
