@@ -34,3 +34,77 @@ export const Register = async (req: Request, res: Response) => {
     });
   }
 };
+
+export const Verification = async (req: Request, res: Response) => {
+  try {
+    const { token } = req.body;
+
+    const user: any = jwt.verify(
+      token,
+      envs.TOKEN_SECRET,
+      (err: any, payload: any) => {
+        if (err) {
+          return err;
+        } else {
+          return payload;
+        }
+      }
+    );
+
+    if (user) {
+      await userModel.findByIdAndUpdate(
+        user?.id,
+        { token: "", verify: true },
+        { new: true }
+      );
+
+      return res.status(HTTP.CREATE).json({
+        message: "Congratulations your account has been Verified!!!",
+      });
+    } else {
+      return res.status(HTTP.BAD_REQUEST).json({
+        message: "Error with your ID",
+      });
+    }
+  } catch (error: any) {
+    return res.status(HTTP.BAD_REQUEST).json({
+      message: `User Registration Error: ${error.message}`,
+      info: error,
+    });
+  }
+};
+
+export const SignIn = async (req: Request, res: Response) => {
+  try {
+    const { email, password } = req.body;
+    const user = await userModel.findOne({ email });
+    if (user) {
+      const checkPassword = await bcrypt.compare(password, user?.password!);
+      if (checkPassword) {
+        if (user.verified && user.token === "") {
+          return res.status(HTTP.CREATE).json({
+            message: "Welcome back",
+          });
+        } else {
+          return res.status(HTTP.BAD_REQUEST).json({
+            message:
+              "Restricted Access, Please Check Your Mail to Verify Your Account",
+          });
+        }
+      } else {
+        return res.status(HTTP.BAD_REQUEST).json({
+          message: "Invalid Passsword",
+        });
+      }
+    } else {
+      return res.status(HTTP.NOT_FOUND).json({
+        message: "Invalid User",
+      });
+    }
+  } catch (error: any) {
+    return res.status(HTTP.BAD_REQUEST).json({
+      message: `Error Occured while signing user in:${error.message}`,
+      info: error,
+    });
+  }
+};
