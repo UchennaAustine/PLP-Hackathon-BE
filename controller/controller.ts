@@ -25,7 +25,7 @@ export const Register = async (req: Request, res: Response) => {
       avatar: await email.charAt().toUpperCase(),
     });
 
-    const tokenID = jwt.sign({ id: user?.id }, "secret");
+    const tokenID = jwt.sign({ id: user?.id }, envs.TOKEN_SECRET);
 
     verify(user, tokenID).then(() => {
       console.log("sent");
@@ -66,14 +66,15 @@ export const Verification = async (req: Request, res: Response) => {
       { new: true }
     );
 
-    return res.status(HTTP.CREATE).json({
-      message: "Congratulations your account has been Verified!!!",
-    });
-    // } else {
-    //   return res.status(HTTP.BAD_REQUEST).json({
-    //     message: "Error with your ID",
-    //   });
-    // }
+      return res.status(HTTP.CREATE).json({
+        message: "Congratulations your account has been Verified!!!",
+        data : user
+      });
+    } else {
+      return res.status(HTTP.BAD_REQUEST).json({
+        message: "Error with your ID",
+      });
+    }
   } catch (error: any) {
     return res.status(HTTP.BAD_REQUEST).json({
       message: `User Registration Error: ${error.message}`,
