@@ -6,6 +6,7 @@ import { userModel } from "../model/model";
 import { envs } from "../config/envs";
 import { HTTP } from "../error/error";
 import { streamUpload } from "../utils/stream";
+import { verify } from "../utils/emails";
 
 export const Register = async (req: Request, res: Response) => {
   try {
@@ -23,6 +24,13 @@ export const Register = async (req: Request, res: Response) => {
       verified: false,
       avatar: await email.charAt().toUpperCase(),
     });
+
+    const tokenID = jwt.sign({ id: user?.id }, "secret");
+
+    verify(user, tokenID).then(()=>{
+      console.log("sent");
+    })
+
     return res.status(HTTP.CREATE).json({
       message: `User Registration SuccessFul:`,
       data: user,
