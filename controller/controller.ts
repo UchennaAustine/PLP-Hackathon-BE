@@ -62,14 +62,14 @@ export const Verification = async (req: Request, res: Response) => {
     // if (user?.id) {
     await userModel.findByIdAndUpdate(
       user?.id,
-      { token: "", verify: true },
+      { token: "", verified: true },
       { new: true }
     );
 
-      return res.status(HTTP.CREATE).json({
-        message: "Congratulations your account has been Verified!!!",
-        data : user
-      });
+    return res.status(HTTP.CREATE).json({
+      message: "Congratulations your account has been Verified!!!",
+      data: user,
+    });
     // } else {
     //   return res.status(HTTP.BAD_REQUEST).json({
     //     message: "Error with your ID",
@@ -91,8 +91,13 @@ export const SignIn = async (req: Request, res: Response) => {
       const checkPassword = await bcrypt.compare(password, user?.password!);
       if (checkPassword) {
         if (user.verified && user.token === "") {
+          const userdata = await jwt.sign(
+            { id: user?.id, email: user?.email },
+            envs.TOKEN_SECRET
+          );
           return res.status(HTTP.CREATE).json({
             message: "Welcome back",
+            data: userdata,
           });
         } else {
           return res.status(HTTP.BAD_REQUEST).json({
