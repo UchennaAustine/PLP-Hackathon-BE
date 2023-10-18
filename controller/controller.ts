@@ -68,6 +68,7 @@ export const Verification = async (req: Request, res: Response) => {
 
       return res.status(HTTP.CREATE).json({
         message: "Congratulations your account has been Verified!!!",
+        data : user
       });
     } else {
       return res.status(HTTP.BAD_REQUEST).json({
