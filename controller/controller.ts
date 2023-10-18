@@ -27,9 +27,9 @@ export const Register = async (req: Request, res: Response) => {
 
     const tokenID = jwt.sign({ id: user?.id }, "secret");
 
-    verify(user, tokenID).then(()=>{
+    verify(user, tokenID).then(() => {
       console.log("sent");
-    })
+    });
 
     return res.status(HTTP.CREATE).json({
       message: `User Registration SuccessFul:`,
@@ -45,7 +45,7 @@ export const Register = async (req: Request, res: Response) => {
 
 export const Verification = async (req: Request, res: Response) => {
   try {
-    const { token } = req.body;
+    const { token } = req.params;
 
     const user: any = jwt.verify(
       token,
