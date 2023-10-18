@@ -116,3 +116,37 @@ export const SignIn = async (req: Request, res: Response) => {
     });
   }
 };
+
+export const Users = async (req: Request, res: Response) => {
+  try {
+    const users = await userModel.find();
+
+    return res.status(HTTP.OK).json({
+      message: "success viewAllUser",
+      data: users,
+    });
+  } catch (error: any) {
+    return res.status(HTTP.NOT_FOUND).json({
+      message: `Error occured viewing all users: ${error.message}`,
+      info: error,
+    });
+  }
+};
+
+export const SingleUser = async (req: Request, res: Response) => {
+  try {
+    const { userID } = req.params;
+
+    const user = await userModel.findById(userID);
+
+    return res.status(HTTP.OK).json({
+      message: "User",
+      data: user,
+    });
+  } catch (error: any) {
+    return res.status(HTTP.NOT_FOUND).json({
+      message: `Error occured viewing user: ${error.message}`,
+      info: error,
+    });
+  }
+};
