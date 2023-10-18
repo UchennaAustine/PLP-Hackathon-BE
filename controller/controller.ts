@@ -70,11 +70,11 @@ export const Verification = async (req: Request, res: Response) => {
         message: "Congratulations your account has been Verified!!!",
         data : user
       });
-    } else {
-      return res.status(HTTP.BAD_REQUEST).json({
-        message: "Error with your ID",
-      });
-    }
+    // } else {
+    //   return res.status(HTTP.BAD_REQUEST).json({
+    //     message: "Error with your ID",
+    //   });
+    // }
   } catch (error: any) {
     return res.status(HTTP.BAD_REQUEST).json({
       message: `User Registration Error: ${error.message}`,
