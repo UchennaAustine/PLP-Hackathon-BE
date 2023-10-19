@@ -1,0 +1,20 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const controller_1 = require("../controller/controller");
+const multer_1 = __importDefault(require("multer"));
+const validatorHolder_1 = __importDefault(require("../utils/validatorHolder"));
+const validator_1 = require("../utils/validator");
+const router = (0, express_1.Router)();
+const imageUpload = (0, multer_1.default)().single("avatar");
+router.route("/register").post((0, validatorHolder_1.default)(validator_1.registerValidator), controller_1.Register);
+router.route("/:token/verify").get(controller_1.Verification);
+router.route("/sign-in").post((0, validatorHolder_1.default)(validator_1.signInValidator), controller_1.SignIn);
+router.route("/view-users").get(controller_1.Users);
+router.route("/:userID/view-user").get(controller_1.SingleUser);
+router.route("/:userID/update-user-info").patch(imageUpload, controller_1.UpdateUser);
+router.route("/:userID/delete-user").delete(controller_1.DeleteUser);
+exports.default = router;
